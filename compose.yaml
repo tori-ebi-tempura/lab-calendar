@@ -1,0 +1,33 @@
+version: '1.0'
+
+services:
+  backend:
+    image: lab-calendar:backend
+    container_name: lab_calendar_backend
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    volumes:
+      - ./backend:/backend
+    ports:
+      - 3000:3000
+    tty: true
+    depends_on:
+      - db
+
+  db:
+    image: lab-calendar:db
+    container_name: lab_calendar_db
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    environment:
+      POSTGRES_DATABASE: main
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./docker/db/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    tty: true
+      
