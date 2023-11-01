@@ -1,19 +1,30 @@
 import { Injectable } from "@nestjs/common";
 import { CreateClassDto } from "./dto/create-class.dto";
 import { UpdateClassDto } from "./dto/update-class.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Class } from "./entities/class.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ClassesService {
-  create(createClassDto: CreateClassDto) {
-    return "This action adds a new class";
+  constructor(
+    @InjectRepository(Class)
+    private classesRepository: Repository<Class>,
+  ){}
+
+  async create(createClassDto: CreateClassDto) {
+    return await this.classesRepository.save(createClassDto);
+    // return "This action adds a new class";
   }
 
-  findAll() {
-    return "This action returns all classes";
+  async findAll(): Promise<Class[]>{
+    return await this.classesRepository.find();
+    // return "This action returns all classes";
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} class`;
+  async findOne(id: number) {
+    return await this.classesRepository.findOneBy({ id });
+    // return `This action returns a #${id} class`;
   }
 
   update(id: number, updateClassDto: UpdateClassDto) {

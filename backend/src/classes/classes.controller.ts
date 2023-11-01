@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { ClassesService } from "./classes.service";
 import { CreateClassDto } from "./dto/create-class.dto";
@@ -17,18 +18,26 @@ export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
 
   @Post()
-  create(@Body() createClassDto: CreateClassDto) {
-    return this.classesService.create(createClassDto);
+  async create(@Body() createClassDto: CreateClassDto) {
+    try {
+      const klass = await this.classesService.create(createClassDto);
+      return klass;
+    } catch (error) {
+      return {
+        isSuccessful: error
+      };
+    }
+     
   }
 
   @Get()
-  findAll() {
-    return this.classesService.findAll();
+  async findAll() {
+    return await this.classesService.findAll();
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.classesService.findOne(+id);
+  async findOne(@Param("id", ParseIntPipe) id: number) {
+    return await this.classesService.findOne(id);
   }
 
   @Patch(":id")
