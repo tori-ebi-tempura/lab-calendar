@@ -23,9 +23,10 @@ services:
       context: .
       dockerfile: ./docker/db/Dockerfile
     environment:
-      POSTGRES_DATABASE: main
+      POSTGRES_DB: labdatabase
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
     volumes:
       - ./docker/db/initdb:/docker-entrypoint-initdb.d
     ports:
