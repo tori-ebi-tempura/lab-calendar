@@ -3,5 +3,5 @@ export class CreateClassDto {
   dayOfWeek: string;
   from: string;
   to: string;
-  room: string[];
+  // room: string[];
 }
