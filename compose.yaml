@@ -7,10 +7,11 @@ services:
     build:
       context: .
       dockerfile: ./docker/backend/Dockerfile
+    command: ["npm", "run", "start:dev"]
     volumes:
       - ./backend:/backend
     ports:
-      - 3000:3000
+      - 4000:3000
     tty: true
     depends_on:
       - db
