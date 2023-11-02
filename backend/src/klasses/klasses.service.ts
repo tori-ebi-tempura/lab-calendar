@@ -11,22 +11,72 @@ export class KlassesService {
   constructor(
     @InjectRepository(Klass)
     private klassesRepository: Repository<Klass>,
-    private readonly roomsService: RoomsService
+    private readonly roomsService: RoomsService,
   ) {}
 
   async create(createKlassDto: CreateKlassDto) {
-    // for (const room of createKlassDto.room) {
-      // this.roomsService.findOne("")
-    // }
-    return await this.klassesRepository.save(createKlassDto);
+    const newKlass = new Klass();
+    newKlass.klassName = createKlassDto.klassName;
+    newKlass.dayOfWeek = createKlassDto.dayOfWeek;
+    newKlass.from = createKlassDto.from;
+    newKlass.to = createKlassDto.to;
+    newKlass.rooms = [];
+
+    for (const roomName of createKlassDto.roomNames) {
+      const room = await this.roomsService.findOneByName(roomName);
+      if (!room) {
+        const newRoom = await this.roomsService.create({
+          roomName: roomName,
+        });
+        newKlass.rooms.push(newRoom);
+      } else {
+        newKlass.rooms.push(room);
+      }
+    }
+    return await this.klassesRepository.save(newKlass);
   }
 
   async findAll() {
-    return await this.klassesRepository.find();
+    const klasses = await this.klassesRepository.find({
+      relations: {
+        rooms: true,
+      },
+    });
+
+    const resData: CreateKlassDto[] = [];
+    for (const klass of klasses) {
+      const oneData = new CreateKlassDto();
+      oneData.klassName = klass.klassName;
+      oneData.dayOfWeek = klass.dayOfWeek;
+      oneData.from = klass.from;
+      oneData.to = klass.to;
+      oneData.roomNames = [];
+      for (const room of klass.rooms) {
+        oneData.roomNames.push(room.roomName);
+      }
+      resData.push(oneData);
+    }
+    return resData;
   }
 
-  async findOne(id: number) {
-    return await this.klassesRepository.findOneBy({ id });
+  async findOneById(id: number) {
+    const klass = await this.klassesRepository.findOne({
+      where: { id: id },
+      relations: {
+        rooms: true,
+      },
+    });
+
+    const resData = new CreateKlassDto();
+    resData.klassName = klass.klassName;
+    resData.dayOfWeek = klass.dayOfWeek;
+    resData.from = klass.from;
+    resData.to = klass.to;
+    resData.roomNames = [];
+    for (const room of klass.rooms) {
+      resData.roomNames.push(room.roomName);
+    }
+    return resData;
   }
 
   update(id: number, updateKlassDto: UpdateKlassDto) {

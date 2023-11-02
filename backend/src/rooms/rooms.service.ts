@@ -20,8 +20,14 @@ export class RoomsService {
     return await this.roomsRepository.find();
   }
 
-  async findOne(id: number) {
-    return await this.roomsRepository.findOneBy({ id })
+  async findOneById(id: number) {
+    return await this.roomsRepository.findOne({ where: { id: id } });
+  }
+
+  async findOneByName(roomName: string) {
+    return await this.roomsRepository.findOne({
+      where: { roomName: roomName },
+    });
   }
 
   update(id: number, updateRoomDto: UpdateRoomDto) {

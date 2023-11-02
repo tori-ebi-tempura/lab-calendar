@@ -21,10 +21,10 @@ export class RoomsController {
     try {
       const room = await this.roomsService.create(createRoomDto);
       return room;
-    } catch(error) {
+    } catch (error) {
       return {
-        isSuccessful: error,
-      }
+        isSuccessful: error
+      };
     }
   }
 
@@ -35,7 +35,7 @@ export class RoomsController {
 
   @Get(":id")
   async findOne(@Param("id", ParseIntPipe) id: number) {
-    return await this.roomsService.findOne(id);
+    return await this.roomsService.findOneById(id);
   }
 
   @Patch(":id")
