@@ -1,4 +1,6 @@
 {
   "doubleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "semi": true,
+  "tabWidth": 2
 }

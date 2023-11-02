@@ -6,10 +6,7 @@ import { Klass } from "./entities/klass.entity";
 import { RoomsModule } from "src/rooms/rooms.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Klass]),
-    RoomsModule
-  ],
+  imports: [TypeOrmModule.forFeature([Klass]), RoomsModule],
   controllers: [KlassesController],
   providers: [KlassesService],
 })
