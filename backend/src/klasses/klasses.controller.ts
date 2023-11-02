@@ -1,9 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
-import { KlassesService } from './klasses.service';
-import { CreateKlassDto } from './dto/create-klass.dto';
-import { UpdateKlassDto } from './dto/update-klass.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from "@nestjs/common";
+import { KlassesService } from "./klasses.service";
+import { CreateKlassDto } from "./dto/create-klass.dto";
+import { UpdateKlassDto } from "./dto/update-klass.dto";
 
-@Controller('klasses')
+@Controller("klasses")
 export class KlassesController {
   constructor(private readonly klassesService: KlassesService) {}
 
@@ -14,7 +23,7 @@ export class KlassesController {
       return klass;
     } catch (error) {
       return {
-        isSuccessful: error
+        isSuccessful: error,
       };
     }
   }
@@ -24,18 +33,18 @@ export class KlassesController {
     return await this.klassesService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get(":id")
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     return await this.klassesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateKlassDto: UpdateKlassDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateKlassDto: UpdateKlassDto) {
     return this.klassesService.update(+id, updateKlassDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.klassesService.remove(+id);
   }
 }

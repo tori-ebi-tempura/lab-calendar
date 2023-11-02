@@ -1,30 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import { CreateKlassDto } from './dto/create-klass.dto';
-import { UpdateKlassDto } from './dto/update-klass.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Klass } from './entities/klass.entity';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { CreateKlassDto } from "./dto/create-klass.dto";
+import { UpdateKlassDto } from "./dto/update-klass.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Klass } from "./entities/klass.entity";
+import { Repository } from "typeorm";
+import { RoomsService } from "src/rooms/rooms.service";
 
 @Injectable()
 export class KlassesService {
   constructor(
     @InjectRepository(Klass)
     private klassesRepository: Repository<Klass>,
-  ){}
+    private readonly roomsService: RoomsService
+  ) {}
 
   async create(createKlassDto: CreateKlassDto) {
+    // for (const room of createKlassDto.room) {
+      // this.roomsService.findOne("")
+    // }
     return await this.klassesRepository.save(createKlassDto);
-    // return 'This action adds a new klass';
   }
 
   async findAll() {
     return await this.klassesRepository.find();
-    // return `This action returns all klasses`;
   }
 
   async findOne(id: number) {
     return await this.klassesRepository.findOneBy({ id });
-    // return `This action returns a #${id} klass`;
   }
 
   update(id: number, updateKlassDto: UpdateKlassDto) {
