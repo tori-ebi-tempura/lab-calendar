@@ -1,7 +1,7 @@
 export class CreateKlassDto {
-    name: string;
-    dayOfWeek: string;
-    from: string;
-    to: string;
-    // room: string[];
+  klassName: string;
+  dayOfWeek: string;
+  from: string;
+  to: string;
+  room: string[];
 }

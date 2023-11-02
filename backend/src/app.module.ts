@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { KlassesModule } from './klasses/klasses.module';
-import { RoomsModule } from './rooms/rooms.module';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { KlassesModule } from "./klasses/klasses.module";
+import { RoomsModule } from "./rooms/rooms.module";
 
 @Module({
   imports: [
@@ -18,8 +18,9 @@ import { RoomsModule } from './rooms/rooms.module';
       synchronize: true,
     }),
     KlassesModule,
-    RoomsModule],
-  
+    RoomsModule,
+  ],
+
   controllers: [AppController],
   providers: [AppService],
 })
