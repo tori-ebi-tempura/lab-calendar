@@ -10,6 +10,7 @@
     "format": "prettier -w './**/*.{cjs,ts,vue}'",
     "fix": "run-s lint format",
     "preview": "nuxt preview",
+    "predev": "run-s fix",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
