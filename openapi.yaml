@@ -31,10 +31,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    userName: { type: string, example: "taro"}
-                    studentNumber: { type: string, example: "ce123456"}
+                  $ref: "#/components/schemas/User"
     post:
       summary: "ユーザの新規作成"
       tags: ["users"]
@@ -56,10 +53,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  userName: { type: string, example: "taro"}
-                  studentNumber: { type: string, example: "ce123456"}
+                $ref: "#/components/schemas/User"
         "400":
           description: "Bad Request"
           content:
@@ -91,10 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  userName: { type: string, example: "taro"}
-                  studentNumber: { type: string, example: "ce123456"}
+                $ref: "#/components/schemas/User"
         "404":
           description: "Not Found"
           content:
@@ -107,6 +98,11 @@ paths:
 
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        userName: { type: string, example: "taro"}
+        studentNumber: { type: string, example: "ce123456"}
     400:
       type: object
       properties:
