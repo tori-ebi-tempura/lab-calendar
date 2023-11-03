@@ -1,4 +1,5 @@
 import { Room } from "src/rooms/entities/room.entity";
+import { User } from "src/users/entities/user.entity";
 import {
   Column,
   Entity,
@@ -29,4 +30,10 @@ export class Klass {
   })
   @JoinTable()
   rooms: Room[];
+
+  @ManyToMany(() => User, (user) => user.klasses, {
+    cascade: true,
+  })
+  @JoinTable()
+  users: User[];
 }
