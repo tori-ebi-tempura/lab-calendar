@@ -65,10 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Bad Request"}
-                  statusCode: { type: integer, example: 400}
+                $ref: "#/components/schemas/400"
         "409":
           description: "Conflict"
           content:
@@ -78,9 +75,6 @@ paths:
                 properties:
                   message: { type: string, example: "Conflict"}
                   statusCode: { type: integer, example: 409}
-
-
-
   "/users/{userId}":
     get:
       summary: "ユーザ情報の取得"
@@ -110,3 +104,21 @@ paths:
                 properties:
                   message: { type: string, example: "Not Found"}
                   statusCode: { type: integer, example: 404}
+
+components:
+  schemas:
+    400:
+      type: object
+      properties:
+        message: { type: string, example: "Bad Request"}
+        statusCode: { type: integer, example: 400}
+    404:
+      type: object
+      properties:
+        message: { type: string, example: "Not Found"}
+        statusCode: { type: integer, example: 404}
+    409:
+      type: object
+      properties:
+        message: { type: string, example: "Conflict"}
+        statusCode: { type: integer, example: 409}
