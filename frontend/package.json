@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "lint": "eslint --fix './**/*.{ts,vue}'",
-    "format": "prettier -w './**/*.{ts,vue}'",
+    "format": "prettier -w './**/*.{cjs,ts,vue}'",
     "fix": "run-s lint format",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
