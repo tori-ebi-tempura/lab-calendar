@@ -10,19 +10,33 @@ import {
 
 @Entity()
 export class Klass {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    name: "klass_id"
+  })
   id: number;
 
-  @Column({ length: 50 })
+  @Column({
+    name: "klass_name",
+    length: 50
+  })
   klassName: string;
 
-  @Column({ length: 50 })
+  @Column({
+    name: "day_of_week",
+    length: 50
+  })
   dayOfWeek: string;
 
-  @Column({ type: "time" })
+  @Column({
+    name: "start_time",
+    type: "time" 
+  })
   from: string;
 
-  @Column({ type: "time" })
+  @Column({
+    name: "end_time",
+    type: "time"
+  })
   to: string;
 
   @ManyToMany(() => Room, (room) => room.klasses, {

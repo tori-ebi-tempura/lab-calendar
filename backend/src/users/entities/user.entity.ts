@@ -3,16 +3,27 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({
+        name: "user_id"
+    })
     id: number;
 
-    @Column({ length: 50 })
+    @Column({ 
+        name: "user_name",
+        length: 50
+    })
     userName: string;
 
-    @Column()
-    studentNumber: number;
+    @Column({
+        name: "student_number",
+        length: 50
+    })
+    studentNumber: string;
 
-    @Column({ length: 50})
+    @Column({
+        name: "password",
+        length: 50
+    })
     password: string;
 
     @ManyToMany(() => Klass, (klass) => klass.users)
