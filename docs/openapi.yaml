@@ -1,0 +1,209 @@
+openapi: "3.0.0"
+
+info:
+  title: "lab-calendar"
+  description: "this is lab-calendar's API"
+  version: "1.0.0"
+
+servers: 
+- url: "http://localhost:4000"
+  description: "ローカル環境"
+
+tags:
+  - name: "users"
+    description: "ユーザの操作"
+  - name: "klasses"
+    description: "授業の操作"
+  - name: "rooms"
+    description: "教室の操作"
+
+paths:
+  "/users":
+    get:
+      summary: "ユーザ一覧の取得"
+      tags: ["users"]
+      deprecated: false
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      summary: "ユーザの新規作成"
+      tags: ["users"]
+      deprecated: false
+      requestBody:
+        description: "ユーザ情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName: { type: string, example: "taro"}
+                studentNumber: { type: string, example: "ce123456"}
+                password: { type: string, format: password, example: "taro0000"}
+      responses:
+        "201":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        "409":
+          description: "Conflict"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Conflict"}
+                  statusCode: { type: integer, example: 409}
+  "/users/{userId}":
+    get:
+      summary: "ユーザ情報の取得"
+      tags: ["users"]
+      deprecated: false
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Not Found"}
+                  statusCode: { type: integer, example: 404}
+  "/klasses":
+    get:
+      summary: "授業一覧の取得"
+      tags: ["klasses"]
+      deprecated: false
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Klass"
+    post:
+      summary: "授業の新規作成"
+      tags: ["klasses"]
+      deprecated: false
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+        "409":
+          description: "Conflict"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Conflict"}
+                  statusCode: { type: integer, example: 409}
+  "/klasses/{klassId}":
+    get:
+      summary: "授業情報の取得"
+      tags: ["klasses"]
+      deprecated: false
+      parameters:
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Not Found"}
+                  statusCode: { type: integer, example: 404}
+ 
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId: { type: integer, example: 1}
+        userName: { type: string, example: "taro"}
+        studentNumber: { type: string, example: "ce123456"}
+    Klass:
+      type: object
+      properties:
+        klassId: { type: integer, example: 1}
+        klassName: { type: string, example: "ソフトウェア工学演習"}
+        dayOfWeek: { type: string, example: "Tuesday"}
+        from: { type: string, example: "17:00"}
+        to: { type: string, example: "18:50"}
+        room:
+          type: array
+          items: { type: string, example: "A307"}
+    Klass2:
+      type: object
+      properties:
+        klassId: { type: integer, example: 1}
+        klassName: { type: string, example: "ソフトウェア工学演習"}
+        dayOfWeek: { type: string, example: "Tuesday"}
+        from: { type: string, example: "17:00"}
+        to: { type: string, example: "18:50"}
+        links:
+          type: object
+          properties:
+            rooms: { type: string, example: "/klasses/1/rooms"}
+    400:
+      type: object
+      properties:
+        message: { type: string, example: "Bad Request"}
+        statusCode: { type: integer, example: 400}
+    404:
+      type: object
+      properties:
+        message: { type: string, example: "Not Found"}
+        statusCode: { type: integer, example: 404}
+    409:
+      type: object
+      properties:
+        message: { type: string, example: "Conflict"}
+        statusCode: { type: integer, example: 409}
