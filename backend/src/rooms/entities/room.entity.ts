@@ -3,10 +3,15 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Room {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    name: "room_id"
+  })
   id: number;
 
-  @Column({ length: 50 })
+  @Column({
+    name: "room_name",
+    length: 50
+  })
   roomName: string;
 
   @ManyToMany(() => Klass, (klass) => klass.rooms)
