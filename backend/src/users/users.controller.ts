@@ -38,11 +38,6 @@ export class UsersController {
     return await this.usersService.findOneById(id);
   }
 
-  @Get(":name")
-  async findOneByName(@Param("name") name: string) {
-    return await this.usersService.findOneByName(name);
-  }
-
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
