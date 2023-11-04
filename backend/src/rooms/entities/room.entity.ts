@@ -4,13 +4,13 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Room {
   @PrimaryGeneratedColumn({
-    name: "room_id"
+    name: "room_id",
   })
   id: number;
 
   @Column({
     name: "room_name",
-    length: 50
+    length: 50,
   })
   roomName: string;
 

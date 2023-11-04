@@ -34,7 +34,7 @@ export class KlassesController {
   }
 
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
+  async findOneById(@Param("id", ParseIntPipe) id: number) {
     return await this.klassesService.findOneById(id);
   }
 

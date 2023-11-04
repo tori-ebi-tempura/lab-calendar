@@ -23,7 +23,7 @@ export class RoomsController {
       return room;
     } catch (error) {
       return {
-        isSuccessful: error
+        isSuccessful: error,
       };
     }
   }
@@ -34,7 +34,7 @@ export class RoomsController {
   }
 
   @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number) {
+  async findOneById(@Param("id", ParseIntPipe) id: number) {
     return await this.roomsService.findOneById(id);
   }
 
