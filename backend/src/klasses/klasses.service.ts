@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateKlassDto } from "./dto/create-klass.dto";
 import { UpdateKlassDto } from "./dto/update-klass.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -68,13 +68,15 @@ export class KlassesService {
     });
 
     const resData = new CreateKlassDto();
-    resData.klassName = klass.klassName;
-    resData.dayOfWeek = klass.dayOfWeek;
-    resData.from = klass.from;
-    resData.to = klass.to;
-    resData.roomNames = [];
-    for (const room of klass.rooms) {
-      resData.roomNames.push(room.roomName);
+    resData.klassName = klass?.klassName;
+    resData.dayOfWeek = klass?.dayOfWeek;
+    resData.from = klass?.from;
+    resData.to = klass?.to;
+    if (klass?.rooms !== undefined) {
+      resData.roomNames = [];
+      for (const room of klass?.rooms) {
+        resData.roomNames.push(room?.roomName);
+      }
     }
     return resData;
   }
