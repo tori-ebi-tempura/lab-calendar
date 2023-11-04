@@ -11,31 +11,31 @@ import {
 @Entity()
 export class Klass {
   @PrimaryGeneratedColumn({
-    name: "klass_id"
+    name: "klass_id",
   })
   id: number;
 
   @Column({
     name: "klass_name",
-    length: 50
+    length: 50,
   })
   klassName: string;
 
   @Column({
     name: "day_of_week",
-    length: 50
+    length: 50,
   })
   dayOfWeek: string;
 
   @Column({
     name: "start_time",
-    type: "time" 
+    type: "time",
   })
   from: string;
 
   @Column({
     name: "end_time",
-    type: "time"
+    type: "time",
   })
   to: string;
 

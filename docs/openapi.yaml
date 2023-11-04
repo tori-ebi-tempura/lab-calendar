@@ -14,8 +14,6 @@ tags:
     description: "ユーザの操作"
   - name: "klasses"
     description: "授業の操作"
-  - name: "rooms"
-    description: "教室の操作"
 
 paths:
   "/users":
@@ -180,18 +178,6 @@ components:
         room:
           type: array
           items: { type: string, example: "A307"}
-    Klass2:
-      type: object
-      properties:
-        klassId: { type: integer, example: 1}
-        klassName: { type: string, example: "ソフトウェア工学演習"}
-        dayOfWeek: { type: string, example: "Tuesday"}
-        from: { type: string, example: "17:00"}
-        to: { type: string, example: "18:50"}
-        links:
-          type: object
-          properties:
-            rooms: { type: string, example: "/klasses/1/rooms"}
     400:
       type: object
       properties:
