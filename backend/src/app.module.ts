@@ -6,6 +6,7 @@ import { KlassesModule } from "./klasses/klasses.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -18,6 +19,10 @@ import { AuthModule } from "./auth/auth.module";
       database: "labdatabase",
       autoLoadEntities: true,
       synchronize: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [".env"]
     }),
     KlassesModule,
     RoomsModule,
