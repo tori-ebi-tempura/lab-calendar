@@ -23,7 +23,7 @@ export class KlassesController {
       return klass;
     } catch (error) {
       return {
-        isSuccessful: error,
+        isSuccessful: error
       };
     }
   }
@@ -35,7 +35,7 @@ export class KlassesController {
 
   @Get(":id")
   async findOneById(@Param("id", ParseIntPipe) id: number) {
-    return await this.klassesService.findOneById(id);
+      return await this.klassesService.findOneById(id);
   }
 
   @Patch(":id")

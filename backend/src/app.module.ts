@@ -4,7 +4,9 @@ import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { KlassesModule } from "./klasses/klasses.module";
 import { RoomsModule } from "./rooms/rooms.module";
-import { UsersModule } from './users/users.module';
+import { UsersModule } from "./users/users.module";
+import { AuthModule } from "./auth/auth.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -18,9 +20,14 @@ import { UsersModule } from './users/users.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [".env"]
+    }),
     KlassesModule,
     RoomsModule,
     UsersModule,
+    AuthModule,
   ],
 
   controllers: [AppController],
