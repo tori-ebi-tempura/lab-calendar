@@ -14,6 +14,8 @@ tags:
     description: "ユーザの操作"
   - name: "klasses"
     description: "授業の操作"
+  - name: "logs"
+    description: "ログイン/アウト処理"
 
 paths:
   "/users":
@@ -84,6 +86,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+
         "404":
           description: "Not Found"
           content:
@@ -110,6 +119,21 @@ paths:
       summary: "授業の新規作成"
       tags: ["klasses"]
       deprecated: false
+      requestBody:
+        description: "授業情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                klassName: { type: string, example: "ソフトウェア工学工学演習"}
+                dayOfWeek: { type: string, example: "Tuesday"}
+                from: { type: string, example: "17:00"}
+                to: { type: string, example: "18:50"}
+                roomNames:
+                  type: array
+                  items: { type: string, example: "A307"}
       responses:
         "200":
           description: "成功"
@@ -148,7 +172,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
         "404":
           description: "Not Found"
           content:
@@ -175,9 +199,23 @@ components:
         dayOfWeek: { type: string, example: "Tuesday"}
         from: { type: string, example: "17:00"}
         to: { type: string, example: "18:50"}
-        room:
+        roomNames:
           type: array
           items: { type: string, example: "A307"}
+    KlassDetails:
+      type: object
+      properties:
+        klassId: { type: integer, example: 1}
+        klassName: { type: string, example: "ソフトウェア工学演習"}
+        dayOfWeek: { type: string, example: "Tuesday"}
+        from: { type: string, example: "17:00"}
+        to: { type: string, example: "18:50"}
+        roomNames:
+          type: array
+          items: { type: string, example: "A307"}
+        userNames:
+          type: array
+          items: { type: string, example: "jiro"}
     400:
       type: object
       properties:
