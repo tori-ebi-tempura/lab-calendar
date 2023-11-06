@@ -7,11 +7,7 @@ import { RoomsModule } from "src/rooms/rooms.module";
 import { UsersModule } from "src/users/users.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Klass]), 
-    RoomsModule,
-    UsersModule
-  ],
+  imports: [TypeOrmModule.forFeature([Klass]), RoomsModule, UsersModule],
   controllers: [KlassesController],
   providers: [KlassesService],
 })

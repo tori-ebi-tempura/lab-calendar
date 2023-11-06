@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CreateKlassDto } from "./dto/create-klass.dto";
 import { UpdateKlassDto } from "./dto/update-klass.dto";
 import { InjectRepository } from "@nestjs/typeorm";
