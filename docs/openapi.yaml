@@ -177,10 +177,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Not Found"}
-                  statusCode: { type: integer, example: 404}
+                $ref: "#/components/schemas/404"
   "/auth/login":
     post:
       summary: "ログイン処理"
@@ -225,6 +222,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
 components:
   schemas:
     User:
