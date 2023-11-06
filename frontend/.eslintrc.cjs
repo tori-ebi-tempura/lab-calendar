@@ -4,6 +4,9 @@ module.exports = {
   rules: {
     "one-var": ["error", { initialized: "never" }],
     "id-length": "off",
+    "no-console": "off",
+    "sort-keys": "off",
+    "sort-imports": "off",
   },
   overrides: [
     {
