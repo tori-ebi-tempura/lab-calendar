@@ -92,7 +92,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/400"
-
         "404":
           description: "Not Found"
           content:
@@ -182,7 +181,36 @@ paths:
                 properties:
                   message: { type: string, example: "Not Found"}
                   statusCode: { type: integer, example: 404}
- 
+  "/auth/login":
+    post:
+      summary: "ログイン処理"
+      tags: ["logs"]
+      deprecated: false
+      requestBody:
+        description: "ログイン処理"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName: { type: string, example: "taro"}
+                password: { type: string, example: "taro0000"}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string, example: "Here is access_token."}
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
 components:
   schemas:
     User:
@@ -221,6 +249,11 @@ components:
       properties:
         message: { type: string, example: "Bad Request"}
         statusCode: { type: integer, example: 400}
+    401:
+      type: object
+      properties:
+        message: { type: string, example: "Unauthorized"}
+        statusCode: { type: string, example: 401}
     404:
       type: object
       properties:
