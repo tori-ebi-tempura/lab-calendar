@@ -14,8 +14,8 @@ tags:
     description: "ユーザの操作"
   - name: "klasses"
     description: "授業の操作"
-  - name: "logs"
-    description: "ログイン/アウト処理"
+  - name: "certification"
+    description: "認証関係の操作"
 
 paths:
   "/users":
@@ -184,10 +184,10 @@ paths:
   "/auth/login":
     post:
       summary: "ログイン処理"
-      tags: ["logs"]
+      tags: ["certification"]
       deprecated: false
       requestBody:
-        description: "ログイン処理"
+        description: "ログイン情報"
         required: true
         content:
           application/json:
@@ -211,6 +211,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/401"
+  "/profile":
+    get:
+      summary: "本人情報の取得"
+      tags: ["certification"]
+      deprecated: false
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
 components:
   schemas:
     User:
@@ -264,3 +278,8 @@ components:
       properties:
         message: { type: string, example: "Conflict"}
         statusCode: { type: integer, example: 409}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
