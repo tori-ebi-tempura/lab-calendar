@@ -14,6 +14,10 @@ tags:
     description: "ユーザの操作"
   - name: "klasses"
     description: "授業の操作"
+  - name: "certification"
+    description: "認証関係の操作"
+  - name: "self"
+    description: "自分の操作"
 
 paths:
   "/users":
@@ -84,15 +88,85 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
         "404":
           description: "Not Found"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Not Found"}
-                  statusCode: { type: integer, example: 404}
+                $ref: "#/components/schemas/404"
+  "/users/{userId}/klasses":
+    get:
+      summary: "ユーザカレンダの授業一覧の取得"
+      tags: ["self"]
+      deprecated: false
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Klass"
+    post:
+      summary: "ユーザカレンダに授業の追加"
+      tags: ["self"]
+      deprecated: false
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "授業ID"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                klassId: { type: integer, example: 1}
+      responses:
+        "201":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KlassDetails"
+  "/users/{userId}/klasses/{klassId}":
+    delete:
+      summary: "授業の登録解除"
+      tags: ["self"]
+      deprecated: false
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {}
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
   "/klasses":
     get:
       summary: "授業一覧の取得"
@@ -110,6 +184,21 @@ paths:
       summary: "授業の新規作成"
       tags: ["klasses"]
       deprecated: false
+      requestBody:
+        description: "授業情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                klassName: { type: string, example: "ソフトウェア工学工学演習"}
+                dayOfWeek: { type: string, example: "Tuesday"}
+                from: { type: string, example: "17:00"}
+                to: { type: string, example: "18:50"}
+                roomNames:
+                  type: array
+                  items: { type: string, example: "A307"}
       responses:
         "200":
           description: "成功"
@@ -128,13 +217,56 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Conflict"}
-                  statusCode: { type: integer, example: 409}
+                $ref: "#/components/schemas/409"
   "/klasses/{klassId}":
     get:
       summary: "授業情報の取得"
+      tags: ["klasses"]
+      deprecated: false
+      parameters:
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KlassDetails"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+    put:
+      summary: "授業情報の更新"
+      tags: ["klasses"]
+      deprecated: false
+      requestBody:
+        description: "授業情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Klass"
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+    delete:
+      summary: "授業情報の削除"
       tags: ["klasses"]
       deprecated: false
       parameters:
@@ -154,11 +286,57 @@ paths:
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/404"
+  "/auth/login":
+    post:
+      summary: "ログイン処理"
+      tags: ["certification"]
+      deprecated: false
+      requestBody:
+        description: "ログイン情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName: { type: string, example: "taro"}
+                password: { type: string, example: "taro0000"}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  message: { type: string, example: "Not Found"}
-                  statusCode: { type: integer, example: 404}
- 
+                  access_token: { type: string, example: "Here is access_token."}
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
+  "/profile":
+    get:
+      summary: "本人情報の取得"
+      tags: ["certification"]
+      deprecated: false
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401"
 components:
   schemas:
     User:
@@ -175,14 +353,33 @@ components:
         dayOfWeek: { type: string, example: "Tuesday"}
         from: { type: string, example: "17:00"}
         to: { type: string, example: "18:50"}
-        room:
+        roomNames:
           type: array
           items: { type: string, example: "A307"}
+    KlassDetails:
+      type: object
+      properties:
+        klassId: { type: integer, example: 1}
+        klassName: { type: string, example: "ソフトウェア工学演習"}
+        dayOfWeek: { type: string, example: "Tuesday"}
+        from: { type: string, example: "17:00"}
+        to: { type: string, example: "18:50"}
+        roomNames:
+          type: array
+          items: { type: string, example: "A307"}
+        userNames:
+          type: array
+          items: { type: string, example: "jiro"}
     400:
       type: object
       properties:
         message: { type: string, example: "Bad Request"}
         statusCode: { type: integer, example: 400}
+    401:
+      type: object
+      properties:
+        message: { type: string, example: "Unauthorized"}
+        statusCode: { type: string, example: 401}
     404:
       type: object
       properties:
@@ -193,3 +390,8 @@ components:
       properties:
         message: { type: string, example: "Conflict"}
         statusCode: { type: integer, example: 409}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

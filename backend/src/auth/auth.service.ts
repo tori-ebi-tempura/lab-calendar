@@ -1,28 +1,39 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
+import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
-import { UsersService } from "src/users/users.service";
+import { UpdateUserDto } from "src/users/dto/update-user.dto";
+
+export interface Payload {
+  userName: string;
+  sub: number;
+  studentNumber: string;
+}
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
-    private jwtService: JwtService
-    ){}
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async logIn(userName: string, pass: string) {
+  async validateUser(userName: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByName(userName);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      password; //lint回避のために記述
+      return result;
     }
+    return null;
+  }
 
+  async login(user: UpdateUserDto) {
     const payload = {
-      sub: user.id,
       userName: user.userName,
-      studentNumber: user.studentNumber
-    }
+      sub: user.id,
+      studentNumber: user.studentNumber,
+    };
     return {
-      access_token: await this.jwtService.signAsync(payload)
-    }
-
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

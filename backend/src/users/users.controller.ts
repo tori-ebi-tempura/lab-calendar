@@ -23,7 +23,7 @@ export class UsersController {
       return user;
     } catch (error) {
       return {
-        isSuccessful: error
+        isSuccessful: error,
       };
     }
   }
