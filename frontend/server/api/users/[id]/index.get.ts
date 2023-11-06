@@ -4,6 +4,9 @@ type ResponseObject = {
   userId: number;
   userName: string;
   studentNumber: string;
+  link: {
+    participations: string;
+  };
 };
 
 export default defineEventHandler((event) => {
@@ -22,6 +25,9 @@ export default defineEventHandler((event) => {
       userId: user.userId,
       userName: user.userName,
       studentNumber: user.studentNumber,
+      link: {
+        participations: `/api/users/${user.userId}/participations`,
+      },
     };
     return responseObject;
   } catch (error) {
