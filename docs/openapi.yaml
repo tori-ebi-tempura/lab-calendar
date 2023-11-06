@@ -16,6 +16,8 @@ tags:
     description: "授業の操作"
   - name: "certification"
     description: "認証関係の操作"
+  - name: "self"
+    description: "自分の操作"
 
 paths:
   "/users":
@@ -97,10 +99,68 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Not Found"}
-                  statusCode: { type: integer, example: 404}
+                $ref: "#/components/schemas/404"
+  "/users/{userId}/klasses":
+    get:
+      summary: "ユーザカレンダの授業一覧の取得"
+      tags: ["self"]
+      deprecated: false
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Klass"
+    post:
+      summary: "ユーザカレンダに授業の追加"
+      tags: ["self"]
+      deprecated: false
+      requestBody:
+        description: "授業ID"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                klassId: { type: integer, example: 1}
+      responses:
+        "201":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KlassDetails"
+  "/users/{userId}/klasses/{klassId}":
+    delete:
+      summary: "授業の登録解除"
+      tags: ["self"]
+      deprecated: false
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {}
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
   "/klasses":
     get:
       summary: "授業一覧の取得"
@@ -151,10 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message: { type: string, example: "Conflict"}
-                  statusCode: { type: integer, example: 409}
+                $ref: "#/components/schemas/409"
   "/klasses/{klassId}":
     get:
       summary: "授業情報の取得"
@@ -172,6 +229,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/KlassDetails"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
+    put:
+      summary: "授業情報の更新"
+      tags: ["klasses"]
+      deprecated: false
+      requestBody:
+        description: "授業情報"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Klass"
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400"
+    delete:
+      summary: "授業情報の削除"
+      tags: ["klasses"]
+      deprecated: false
+      parameters:
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Klass"
         "404":
           description: "Not Found"
           content:
