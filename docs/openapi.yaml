@@ -160,7 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
         "404":
           description: "Not Found"
           content:
@@ -179,7 +179,7 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
     post:
       summary: "授業の新規作成"
       tags: ["klasses"]
@@ -251,14 +251,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Klass"
+              $ref: "#/components/schemas/KlassDetails"
       responses:
         "200":
           description: "成功"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
         "400":
           description: "Bad Request"
           content:
@@ -280,7 +280,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
         "404":
           description: "Not Found"
           content:
