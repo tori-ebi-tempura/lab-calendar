@@ -6,7 +6,7 @@ export class Room {
   @PrimaryGeneratedColumn({
     name: "room_id",
   })
-  id: number;
+  roomId: number;
 
   @Column({
     name: "room_name",

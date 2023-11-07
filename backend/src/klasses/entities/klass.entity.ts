@@ -13,7 +13,7 @@ export class Klass {
   @PrimaryGeneratedColumn({
     name: "klass_id",
   })
-  id: number;
+  klassId: number;
 
   @Column({
     name: "klass_name",
