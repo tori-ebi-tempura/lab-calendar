@@ -18,12 +18,7 @@ export class KlassesController {
 
   @Post()
   async create(@Body() createKlassDto: CreateKlassDto): Promise<Klass> {
-    try {
-      const klass = await this.klassesService.create(createKlassDto);
-      return klass;
-    } catch (error) {
-      return null;
-    }
+      return await this.klassesService.create(createKlassDto);
   }
 
   @Get()

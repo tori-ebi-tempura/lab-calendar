@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -23,6 +24,12 @@ export class KlassesService {
   ) {}
 
   async create(createKlassDto: CreateKlassDto): Promise<Klass> {
+    // if (!(createKlassDto instanceof CreateKlassDto)) {
+    //   throw new BadRequestException();
+    // }
+    if (await this.klassesRepository.findOne({where:{klassName:createKlassDto.klassName}})) {
+      throw new ConflictException();
+    }
     const newKlass = new Klass();
     newKlass.klassName = createKlassDto.klassName;
     newKlass.dayOfWeek = createKlassDto.dayOfWeek;

@@ -93,7 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/400"
+                $ref: "#/components/schemas/400vol2"
         "404":
           description: "Not Found"
           content:
@@ -192,7 +192,7 @@ paths:
             schema:
               type: object
               properties:
-                klassName: { type: string, example: "ソフトウェア工学工学演習"}
+                klassName: { type: string, example: "ソフトウェア工学演習"}
                 dayOfWeek: { type: string, example: "Tuesday"}
                 from: { type: string, example: "17:00"}
                 to: { type: string, example: "18:50"}
@@ -241,7 +241,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/404"
-    put:
+    patch:
       summary: "授業情報の更新"
       tags: ["klasses"]
       deprecated: false
@@ -251,7 +251,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/KlassDetails"
+              type: object
+              properties:
+                klassName: { type: string, example: "変更してみた"}
       responses:
         "200":
           description: "成功"
@@ -265,6 +267,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/400"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/404"
     delete:
       summary: "授業情報の削除"
       tags: ["klasses"]
@@ -374,6 +382,12 @@ components:
       type: object
       properties:
         message: { type: string, example: "Bad Request"}
+        statusCode: { type: integer, example: 400}
+    400vol2:
+      type: object
+      properties:
+        message: { type: string, example: "Validation failed (numeric string is expected)"}
+        error: { type: string, example: "Bad Request"}
         statusCode: { type: integer, example: 400}
     401:
       type: object

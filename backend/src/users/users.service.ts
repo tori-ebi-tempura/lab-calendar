@@ -17,9 +17,9 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    if (!(createUserDto instanceof CreateUserDto)) {
-      throw new BadRequestException();
-    }
+    // if (!(createUserDto instanceof CreateUserDto)) {
+    //   throw new BadRequestException();
+    // }
     if (
       await this.usersRepository.findOne({
         where: { userName: createUserDto?.userName },
