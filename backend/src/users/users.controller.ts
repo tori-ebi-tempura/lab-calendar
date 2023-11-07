@@ -16,12 +16,7 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const user = await this.usersService.create(createUserDto);
-      return user;
-    } catch (error) {
-      return null;
-    }
+    return await this.usersService.create(createUserDto);
   }
 
   @Get()
