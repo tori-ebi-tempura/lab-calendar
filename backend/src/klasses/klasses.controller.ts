@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Body,
   Param,
   ParseIntPipe,
@@ -37,10 +38,13 @@ export class KlassesController {
     return await this.klassesService.findOneById(id);
   }
 
-  // @Patch(":id")
-  // update(@Param("id") id: string, @Body() updateKlassDto: UpdateKlassDto) {
-  //   return this.klassesService.update(+id, updateKlassDto);
-  // }
+  @Patch(":id")
+  async update(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateKlassDto: UpdateKlassDto,
+  ): Promise<UpdateKlassDto> {
+    return await this.klassesService.update(id, updateKlassDto);
+  }
 
   // @Delete(":id")
   // remove(@Param("id") id: string) {

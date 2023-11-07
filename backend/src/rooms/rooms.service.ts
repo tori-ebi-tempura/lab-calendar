@@ -11,19 +11,19 @@ export class RoomsService {
     private roomsRepository: Repository<Room>,
   ) {}
 
-  async create(createRoomDto: CreateRoomDto) {
+  async create(createRoomDto: CreateRoomDto): Promise<Room> {
     return await this.roomsRepository.save(createRoomDto);
   }
 
-  async findAll() {
+  async findAll(): Promise<Room[]> {
     return await this.roomsRepository.find();
   }
 
-  async findOneById(id: number) {
-    return await this.roomsRepository.findOne({ where: { id: id } });
+  async findOneById(id: number): Promise<Room> {
+    return await this.roomsRepository.findOne({ where: { roomId: id } });
   }
 
-  async findOneByName(roomName: string) {
+  async findOneByName(roomName: string): Promise<Room> {
     return await this.roomsRepository.findOne({
       where: { roomName: roomName },
     });
