@@ -43,9 +43,10 @@ export class KlassesService {
       },
     });
 
-    const resData: CreateKlassDto[] = [];
+    const resData: UpdateKlassDto[] = [];
     for (const klass of klasses) {
-      const oneData = new CreateKlassDto();
+      const oneData = new UpdateKlassDto();
+      oneData.id = klass.id;
       oneData.klassName = klass.klassName;
       oneData.dayOfWeek = klass.dayOfWeek;
       oneData.from = klass.from;
@@ -54,6 +55,7 @@ export class KlassesService {
       for (const room of klass.rooms) {
         oneData.roomNames.push(room.roomName);
       }
+      oneData.userNames = [];
       resData.push(oneData);
     }
     return resData;
@@ -67,7 +69,8 @@ export class KlassesService {
       },
     });
 
-    const resData = new CreateKlassDto();
+    const resData = new UpdateKlassDto();
+    resData.id = klass?.id;
     resData.klassName = klass?.klassName;
     resData.dayOfWeek = klass?.dayOfWeek;
     resData.from = klass?.from;
@@ -78,14 +81,20 @@ export class KlassesService {
         resData.roomNames.push(room?.roomName);
       }
     }
+    if (klass?.users !== undefined) {
+      resData.userNames = [];
+      for (const user of klass?.users) {
+        resData.userNames.push(user?.userName);
+      }
+    }
     return resData;
   }
 
-  update(id: number, updateKlassDto: UpdateKlassDto) {
-    return `This action updates a #${id} klass`;
-  }
+  // update(id: number, updateKlassDto: UpdateKlassDto) {
+  //   return `This action updates a #${id} klass`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} klass`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} klass`;
+  // }
 }
