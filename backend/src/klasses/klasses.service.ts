@@ -24,10 +24,11 @@ export class KlassesService {
   ) {}
 
   async create(createKlassDto: CreateKlassDto): Promise<Klass> {
-    // if (!(createKlassDto instanceof CreateKlassDto)) {
-    //   throw new BadRequestException();
-    // }
-    if (await this.klassesRepository.findOne({where:{klassName:createKlassDto.klassName}})) {
+    if (
+      await this.klassesRepository.findOne({
+        where: { klassName: createKlassDto.klassName },
+      })
+    ) {
       throw new ConflictException();
     }
     const newKlass = new Klass();
@@ -48,7 +49,11 @@ export class KlassesService {
         newKlass.rooms.push(room);
       }
     }
-    return await this.klassesRepository.save(newKlass);
+    try {
+      return await this.klassesRepository.save(newKlass);
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findAll(): Promise<UpdateKlassDto[]> {
@@ -83,6 +88,9 @@ export class KlassesService {
         rooms: true,
       },
     });
+    if (!klass) {
+      throw new NotFoundException();
+    }
 
     const resData = new UpdateKlassDto();
     resData.klassId = klass?.klassId;
@@ -144,10 +152,32 @@ export class KlassesService {
     } catch (error) {
       throw new BadRequestException();
     }
-    // return updateData;
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} klass`;
+  async remove(id: number): Promise<object> {
+    const result: any = await this.klassesRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    } else {
+      return {
+        message: "DELETE was succeeded",
+      };
+    }
+  }
+
+  // checkTypeOfCreateKlassDto(obj: object): boolean {
+  //   const comparisonCreateKlassDto: CreateKlassDto = new CreateKlassDto();
+  //   comparisonCreateKlassDto.klassName = "klassName";
+  //   comparisonCreateKlassDto.dayOfWeek = "dayOfWeek";
+  //   comparisonCreateKlassDto.from = "from";
+  //   comparisonCreateKlassDto.to = "to";
+  //   comparisonCreateKlassDto.roomNames = ["roomName"]
+
+  //   for (const key in comparisonCreateKlassDto) {
+  //     if (obj[key] === undefined) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
   // }
 }

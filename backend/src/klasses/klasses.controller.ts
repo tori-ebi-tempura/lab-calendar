@@ -6,6 +6,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Delete,
 } from "@nestjs/common";
 import { KlassesService } from "./klasses.service";
 import { CreateKlassDto } from "./dto/create-klass.dto";
@@ -18,7 +19,7 @@ export class KlassesController {
 
   @Post()
   async create(@Body() createKlassDto: CreateKlassDto): Promise<Klass> {
-      return await this.klassesService.create(createKlassDto);
+    return await this.klassesService.create(createKlassDto);
   }
 
   @Get()
@@ -41,8 +42,8 @@ export class KlassesController {
     return await this.klassesService.update(id, updateKlassDto);
   }
 
-  // @Delete(":id")
-  // remove(@Param("id") id: string) {
-  //   return this.klassesService.remove(+id);
-  // }
+  @Delete(":id")
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<object> {
+    return await this.klassesService.remove(id);
+  }
 }
