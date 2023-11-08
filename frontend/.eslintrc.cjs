@@ -5,6 +5,7 @@ module.exports = {
     "one-var": ["error", { initialized: "never" }],
     "id-length": "off",
     "no-console": "off",
+    "no-ternary": "off",
     "sort-keys": "off",
     "sort-imports": "off",
   },
