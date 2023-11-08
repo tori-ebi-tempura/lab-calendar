@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/backend/Dockerfile
-    command: ["npm", "run", "start:dev"]
+    command: sh -c "npm install && npm run start:dev"
     volumes:
       - ./backend:/backend
     ports:
