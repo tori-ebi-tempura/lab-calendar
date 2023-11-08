@@ -17,9 +17,6 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    // if (!(createUserDto instanceof CreateUserDto)) {
-    //   throw new BadRequestException();
-    // }
     if (
       await this.usersRepository.findOne({
         where: { userName: createUserDto?.userName },
@@ -27,15 +24,18 @@ export class UsersService {
     ) {
       throw new ConflictException();
     }
-    const user: User = await this.usersRepository.save(createUserDto);
-    return user;
+    try {
+      return await this.usersRepository.save(createUserDto);
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
-  async findOneById(id: number): Promise<User> {
+  async findOneById(id: number): Promise<User | any> {
     const user: User = await this.usersRepository.findOne({
       where: { userId: id },
     });
@@ -58,4 +58,18 @@ export class UsersService {
   // remove(id: number) {
   //   return `This action removes a #${id} user`;
   // }
+
+  checkTypeOfCreateUserDto(obj: object): boolean {
+    const comparisonCreateUserDto: CreateUserDto = new CreateUserDto();
+    comparisonCreateUserDto.userName = "userName";
+    comparisonCreateUserDto.studentNumber = "studentNumber";
+    comparisonCreateUserDto.password = "password";
+
+    for (const key in comparisonCreateUserDto) {
+      if (obj[key] === undefined) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
