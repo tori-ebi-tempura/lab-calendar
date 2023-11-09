@@ -60,7 +60,7 @@ export class KlassesService {
   }
 
   async findAll(): Promise<UpdateKlassDto[]> {
-    const klasses = await this.klassesRepository.find({
+    const klasses: Klass[] = await this.klassesRepository.find({
       relations: {
         rooms: true,
         users: true,
@@ -141,14 +141,18 @@ export class KlassesService {
   }
 
   // toDo:addUserInKlassesが作成出来たら戻り値の実装
-  async findAllByUserId(id: number): Promise<UpdateKlassDto | any> {
+  async findAllByUserId(id: number): Promise<UpdateKlassDto[] | any> {
     const klasses: Klass[] = await this.klassesRepository
       .createQueryBuilder("klass")
-      .innerJoin("klass.rooms", "rooms")
-      .innerJoin("klass.users", "users")
+      .innerJoinAndSelect("klass.rooms", "rooms")
+      .innerJoinAndSelect("klass.users", "users")
       .where("users.userId = :userId", { userId: id })
       .getMany();
-    return klasses;
+    const resData: UpdateKlassDto[] = [];
+    for (const klass of klasses) {
+      resData.push(this.KlassToUpdateKlassDto(klass));
+    }
+    return resData;
   }
 
   async addUserInKlasses(
