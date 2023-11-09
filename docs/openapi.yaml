@@ -31,9 +31,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
     post:
       summary: "ユーザの新規作成"
       tags: ["users"]
@@ -105,8 +108,11 @@ paths:
       summary: "ユーザカレンダの授業一覧の取得"
       tags: ["self"]
       deprecated: false
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {}
       responses:
         "200":
           description: "成功"
@@ -116,10 +122,21 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Klass"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400vol2"
     post:
       summary: "ユーザカレンダに授業の追加"
       tags: ["self"]
       deprecated: false
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {}
       security:
         - bearerAuth: []
       requestBody:
@@ -178,8 +195,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                $ref: "#/components/schemas/KlassDetails"
+                type: object
+                properties:
+                  klasses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/KlassDetails"
     post:
       summary: "授業の新規作成"
       tags: ["klasses"]
@@ -193,7 +214,7 @@ paths:
               type: object
               properties:
                 klassName: { type: string, example: "ソフトウェア工学演習"}
-                dayOfWeek: { type: string, example: "Tuesday"}
+                dayOfWeek: { type: integer, example: 2}
                 from: { type: string, example: "17:00"}
                 to: { type: string, example: "18:50"}
                 roomNames:
@@ -205,7 +226,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Klass"
+                $ref: "#/components/schemas/KlassDetails"
         "400":
           description: "Bad Request"
           content:
@@ -245,6 +266,11 @@ paths:
       summary: "授業情報の更新"
       tags: ["klasses"]
       deprecated: false
+      parameters:
+        - name: klassId
+          in: path
+          required: true
+          schema: {}
       requestBody:
         description: "授業情報"
         required: true
@@ -288,7 +314,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/KlassDetails"
+                type: object
+                properties:
+                  message: { type: string, example: "DELETE was succeeded"}
         "404":
           description: "Not Found"
           content:
@@ -311,7 +339,7 @@ paths:
                 userName: { type: string, example: "taro"}
                 password: { type: string, example: "taro0000"}
       responses:
-        "200":
+        "201":
           description: "成功"
           content:
             application/json:
@@ -327,7 +355,7 @@ paths:
                 $ref: "#/components/schemas/401"
   "/profile":
     get:
-      summary: "本人情報の取得"
+      summary: "Tokenから本人情報の取得"
       tags: ["certification"]
       deprecated: false
       security:
@@ -358,7 +386,7 @@ components:
       properties:
         klassId: { type: integer, example: 1}
         klassName: { type: string, example: "ソフトウェア工学演習"}
-        dayOfWeek: { type: string, example: "Tuesday"}
+        dayOfWeek: { type: integer, example: 2}
         from: { type: string, example: "17:00"}
         to: { type: string, example: "18:50"}
         roomNames:
@@ -369,7 +397,7 @@ components:
       properties:
         klassId: { type: integer, example: 1}
         klassName: { type: string, example: "ソフトウェア工学演習"}
-        dayOfWeek: { type: string, example: "Tuesday"}
+        dayOfWeek: { type: integer, example: 2}
         from: { type: string, example: "17:00"}
         to: { type: string, example: "18:50"}
         roomNames:
