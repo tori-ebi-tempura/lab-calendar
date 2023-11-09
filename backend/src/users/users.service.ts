@@ -32,7 +32,8 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    const users: User[] =  await this.usersRepository.find();
+    return users;
   }
 
   async findOneById(id: number): Promise<User | any> {
@@ -48,6 +49,7 @@ export class UsersService {
   async findOneByName(name: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { userName: name },
+      select: ["password"]
     });
   }
 
