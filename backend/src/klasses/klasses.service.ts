@@ -179,6 +179,31 @@ export class KlassesService {
     return this.KlassToUpdateKlassDto(newKlass);
   }
 
+  async removeUserFromKlass(
+    userId: number,
+    klassId: number,
+  ): Promise<UpdateKlassDto> {
+    const klass: Klass = await this.klassesRepository.findOne({
+      where: { klassId: klassId },
+      relations: {
+        rooms: true,
+        users: true,
+      },
+    });
+
+    if (!klass) {
+      throw new NotFoundException();
+    }
+
+    for (let i = 0; i < klass.users.length; i++) {
+      if (klass.users[i].userId === userId) {
+        klass.users.splice(i, 1);
+        const newKlass = await this.klassesRepository.save(klass);
+        return this.KlassToUpdateKlassDto(newKlass);
+      }
+      return this.KlassToUpdateKlassDto(klass);
+    }
+  }
   KlassToUpdateKlassDto(klass: Klass): UpdateKlassDto {
     const resData: UpdateKlassDto = new UpdateKlassDto();
     resData.klassId = klass.klassId;

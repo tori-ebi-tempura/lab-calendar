@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Inject,
   forwardRef,
+  Delete,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -62,6 +63,14 @@ export class UsersController {
     @Body() body: any,
   ): Promise<UpdateKlassDto> {
     return await this.klassesService.addUserInKlasses(id, body?.klassId);
+  }
+
+  @Delete(":userId/klasses/:klassId")
+  async removeUserFromKlass(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Param("klassId", ParseIntPipe) klassId: number,
+  ): Promise<UpdateKlassDto> {
+    return await this.klassesService.removeUserFromKlass(userId, klassId);
   }
 
   // @Patch(":id")
