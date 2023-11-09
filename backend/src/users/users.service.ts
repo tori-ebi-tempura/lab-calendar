@@ -1,19 +1,24 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
+import { KlassesService } from "src/klasses/klasses.service";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @Inject(forwardRef(() => KlassesService))
+    private readonly klassesService: KlassesService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -32,7 +37,7 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users: User[] =  await this.usersRepository.find();
+    const users: User[] = await this.usersRepository.find();
     return users;
   }
 
@@ -49,7 +54,7 @@ export class UsersService {
   async findOneByName(name: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { userName: name },
-      select: ["password"]
+      select: ["password"],
     });
   }
 
