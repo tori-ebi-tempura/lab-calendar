@@ -56,6 +56,14 @@ export class UsersController {
     };
   }
 
+  @Post(":id/klasses")
+  async registerKlass(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() body: any,
+  ): Promise<UpdateKlassDto> {
+    return await this.klassesService.addUserInKlasses(id, body?.klassId);
+  }
+
   // @Patch(":id")
   // update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
   //   return this.usersService.update(+id, updateUserDto);

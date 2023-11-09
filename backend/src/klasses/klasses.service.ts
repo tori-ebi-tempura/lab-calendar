@@ -140,6 +140,7 @@ export class KlassesService {
     }
   }
 
+  // toDo:addUserInKlassesが作成出来たら戻り値の実装
   async findAllByUserId(id: number): Promise<UpdateKlassDto | any> {
     const klasses: Klass[] = await this.klassesRepository
       .createQueryBuilder("klass")
@@ -148,6 +149,34 @@ export class KlassesService {
       .where("users.userId = :userId", { userId: id })
       .getMany();
     return klasses;
+  }
+
+  async addUserInKlasses(
+    userId: number,
+    klassId: number,
+  ): Promise<UpdateKlassDto | any> {
+    const klass: Klass = await this.klassesRepository.findOne({
+      where: { klassId: klassId },
+      relations: {
+        rooms: true,
+        users: true,
+      },
+    });
+
+    if (!klass) {
+      throw new NotFoundException();
+    }
+
+    const user: User = await this.usersService.findOneById(userId);
+
+    for (let i = 0; i < klass.users.length; i++) {
+      if (klass.users[i].userName === user.userName) {
+        throw new ConflictException();
+      }
+    }
+    klass.users.push(user);
+    const newKlass: Klass = await this.klassesRepository.save(klass);
+    return this.KlassToUpdateKlassDto(newKlass);
   }
 
   KlassToUpdateKlassDto(klass: Klass): UpdateKlassDto {
