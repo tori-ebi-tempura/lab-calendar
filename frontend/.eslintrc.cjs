@@ -8,6 +8,7 @@ module.exports = {
     "no-ternary": "off",
     "sort-keys": "off",
     "sort-imports": "off",
+    "no-plusplus": "off",
   },
   overrides: [
     {
@@ -25,6 +26,7 @@ module.exports = {
       rules: {
         "vue/multi-word-component-names": "off",
         "no-undef": "off",
+        "no-magic-numbers": "off",
       },
     },
   ],
