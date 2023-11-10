@@ -1,65 +1,39 @@
 <template>
   <v-container class="d-flex mt-3 pa-1">
-    <v-sheet
-      height="100%"
+    <CalendarWeekColumn
       width="10%"
+      :start-time="startTime"
+      :end-time="endTime"
     >
-      <v-sheet
-        width="100%"
-        height="2em"
-        class="border-b"
-      />
-      <v-sheet
-        v-for="time in times"
-        :key="time.id"
-        height="6dvh"
-        class="d-flex justify-end align-center"
-      >
+      <template #body="bodyProps">
         <span
           class="mx-2"
           style="font-size: xx-small"
         >
-          {{ time.str }}
+          {{ bodyProps.time.str }}
         </span>
         <v-divider />
-      </v-sheet>
-    </v-sheet>
-    <v-sheet
+      </template>
+    </CalendarWeekColumn>
+    <CalendarWeekColumn
       v-for="dayNumber in 6"
       :key="dayNumber"
-      height="100%"
       width="15%"
+      :start-time="startTime"
+      :end-time="endTime"
       class="border-s"
     >
-      <v-sheet
-        width="100%"
-        height="2em"
-        class="border-b d-flex justify-center"
-      >
+      <template #header>
         {{ getDayOfWeekJaString(dayNumber) }}
-      </v-sheet>
-      <v-sheet
-        v-for="i in times.length"
-        :key="i"
-        height="6dvh"
-        class="d-flex justify-end align-center"
-      >
+      </template>
+      <template #body>
         <v-divider />
-      </v-sheet>
-    </v-sheet>
+      </template>
+    </CalendarWeekColumn>
   </v-container>
 </template>
 
 <script setup lang="ts">
-const getTimes = (from: number, to: number) => {
-  const times: { id: number; str: string }[] = [];
-  for (let i = from; i <= to; i++) {
-    times.push({
-      id: i,
-      str: `${String(i).padStart(2, "0")}:00`,
-    });
-  }
-  return times;
-};
-const times = getTimes(9, 21);
+const startTime = 9;
+const endTime = 21;
 </script>
