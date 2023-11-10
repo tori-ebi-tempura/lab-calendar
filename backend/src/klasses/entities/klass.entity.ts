@@ -23,9 +23,8 @@ export class Klass {
 
   @Column({
     name: "day_of_week",
-    length: 50,
   })
-  dayOfWeek: string;
+  dayOfWeek: number;
 
   @Column({
     name: "start_time",

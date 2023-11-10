@@ -13,6 +13,10 @@ import { CreateKlassDto } from "./dto/create-klass.dto";
 import { UpdateKlassDto } from "./dto/update-klass.dto";
 import { Klass } from "./entities/klass.entity";
 
+export interface KlassesObject {
+  klasses: UpdateKlassDto[];
+}
+
 @Controller("klasses")
 export class KlassesController {
   constructor(private readonly klassesService: KlassesService) {}
@@ -23,8 +27,11 @@ export class KlassesController {
   }
 
   @Get()
-  async findAll(): Promise<UpdateKlassDto[]> {
-    return await this.klassesService.findAll();
+  async findAll(): Promise<KlassesObject> {
+    const klasses: UpdateKlassDto[] = await this.klassesService.findAll();
+    return {
+      klasses: klasses,
+    };
   }
 
   @Get(":id")

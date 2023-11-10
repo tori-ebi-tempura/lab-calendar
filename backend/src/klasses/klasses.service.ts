@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from "@nestjs/common";
 import { CreateKlassDto } from "./dto/create-klass.dto";
 import { UpdateKlassDto } from "./dto/update-klass.dto";
@@ -20,6 +22,7 @@ export class KlassesService {
     @InjectRepository(Klass)
     private klassesRepository: Repository<Klass>,
     private readonly roomsService: RoomsService,
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
   ) {}
 
@@ -57,26 +60,16 @@ export class KlassesService {
   }
 
   async findAll(): Promise<UpdateKlassDto[]> {
-    const klasses = await this.klassesRepository.find({
+    const klasses: Klass[] = await this.klassesRepository.find({
       relations: {
         rooms: true,
+        users: true,
       },
     });
 
     const resData: UpdateKlassDto[] = [];
     for (const klass of klasses) {
-      const oneData = new UpdateKlassDto();
-      oneData.klassId = klass.klassId;
-      oneData.klassName = klass.klassName;
-      oneData.dayOfWeek = klass.dayOfWeek;
-      oneData.from = klass.from;
-      oneData.to = klass.to;
-      oneData.roomNames = [];
-      for (const room of klass.rooms) {
-        oneData.roomNames.push(room.roomName);
-      }
-      oneData.userNames = [];
-      resData.push(oneData);
+      resData.push(this.KlassToUpdateKlassDto(klass));
     }
     return resData;
   }
@@ -86,31 +79,13 @@ export class KlassesService {
       where: { klassId: id },
       relations: {
         rooms: true,
+        users: true,
       },
     });
     if (!klass) {
       throw new NotFoundException();
     }
-
-    const resData = new UpdateKlassDto();
-    resData.klassId = klass?.klassId;
-    resData.klassName = klass?.klassName;
-    resData.dayOfWeek = klass?.dayOfWeek;
-    resData.from = klass?.from;
-    resData.to = klass?.to;
-    if (klass?.rooms !== undefined) {
-      resData.roomNames = [];
-      for (const room of klass?.rooms) {
-        resData.roomNames.push(room?.roomName);
-      }
-    }
-    if (klass?.users !== undefined) {
-      resData.userNames = [];
-      for (const user of klass?.users) {
-        resData.userNames.push(user?.userName);
-      }
-    }
-    return resData;
+    return this.KlassToUpdateKlassDto(klass);
   }
 
   async update(
@@ -165,6 +140,91 @@ export class KlassesService {
     }
   }
 
+  // toDo:addUserInKlassesが作成出来たら戻り値の実装
+  async findAllByUserId(id: number): Promise<UpdateKlassDto[] | any> {
+    const klasses: Klass[] = await this.klassesRepository
+      .createQueryBuilder("klass")
+      .innerJoinAndSelect("klass.rooms", "rooms")
+      .innerJoinAndSelect("klass.users", "users")
+      .where("users.userId = :userId", { userId: id })
+      .getMany();
+    const resData: UpdateKlassDto[] = [];
+    for (const klass of klasses) {
+      resData.push(this.KlassToUpdateKlassDto(klass));
+    }
+    return resData;
+  }
+
+  async addUserInKlasses(
+    userId: number,
+    klassId: number,
+  ): Promise<UpdateKlassDto | any> {
+    const klass: Klass = await this.klassesRepository.findOne({
+      where: { klassId: klassId },
+      relations: {
+        rooms: true,
+        users: true,
+      },
+    });
+
+    if (!klass) {
+      throw new NotFoundException();
+    }
+
+    const user: User = await this.usersService.findOneById(userId);
+
+    for (let i = 0; i < klass.users.length; i++) {
+      if (klass.users[i].userName === user.userName) {
+        throw new ConflictException();
+      }
+    }
+    klass.users.push(user);
+    const newKlass: Klass = await this.klassesRepository.save(klass);
+    return this.KlassToUpdateKlassDto(newKlass);
+  }
+
+  async removeUserFromKlass(
+    userId: number,
+    klassId: number,
+  ): Promise<UpdateKlassDto> {
+    const klass: Klass = await this.klassesRepository.findOne({
+      where: { klassId: klassId },
+      relations: {
+        rooms: true,
+        users: true,
+      },
+    });
+
+    if (!klass) {
+      throw new NotFoundException();
+    }
+
+    for (let i = 0; i < klass.users.length; i++) {
+      if (klass.users[i].userId === userId) {
+        klass.users.splice(i, 1);
+        const newKlass = await this.klassesRepository.save(klass);
+        return this.KlassToUpdateKlassDto(newKlass);
+      }
+      return this.KlassToUpdateKlassDto(klass);
+    }
+  }
+  KlassToUpdateKlassDto(klass: Klass): UpdateKlassDto {
+    const resData: UpdateKlassDto = new UpdateKlassDto();
+    resData.klassId = klass.klassId;
+    resData.klassName = klass.klassName;
+    resData.dayOfWeek = klass.dayOfWeek;
+    resData.from = klass.from;
+    resData.to = klass.to;
+    resData.roomNames = [];
+    for (const room of klass.rooms) {
+      resData.roomNames.push(room.roomName);
+    }
+    resData.userNames = [];
+    for (const user of klass.users) {
+      resData.userNames.push(user.userName);
+    }
+    return resData;
+  }
   // checkTypeOfCreateKlassDto(obj: object): boolean {
   //   const comparisonCreateKlassDto: CreateKlassDto = new CreateKlassDto();
   //   comparisonCreateKlassDto.klassName = "klassName";
