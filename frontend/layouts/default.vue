@@ -1,10 +1,10 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <v-app-bar
-    :elevation="10"
+    :elevation="5"
     color="cyan-darken-1"
-    height="80"
   >
-    <v-container class="fill-height d-flex align-center">
+    <v-container class="d-flex align-center">
       <v-app-bar-title>
         <v-btn
           variant="text"
