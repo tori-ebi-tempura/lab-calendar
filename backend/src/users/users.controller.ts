@@ -8,6 +8,7 @@ import {
   Inject,
   forwardRef,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -15,6 +16,7 @@ import { User } from "./entities/user.entity";
 import { KlassesObject } from "src/klasses/klasses.controller";
 import { KlassesService } from "src/klasses/klasses.service";
 import { UpdateKlassDto } from "src/klasses/dto/update-klass.dto";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 export interface UsersObject {
   users: User[];
@@ -57,6 +59,7 @@ export class UsersController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(":id/klasses")
   async registerKlass(
     @Param("id", ParseIntPipe) id: number,
@@ -65,6 +68,7 @@ export class UsersController {
     return await this.klassesService.addUserInKlasses(id, body?.klassId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(":userId/klasses/:klassId")
   async removeUserFromKlass(
     @Param("userId", ParseIntPipe) userId: number,
