@@ -24,18 +24,18 @@ const calcTimeRange = (
 };
 
 /**
- * @param {string} from - Ex: "13:30"
- * @param {string} to - Ex: "17:00"
+ * @param {string} from - Ex: "13:30:00"
+ * @param {string} to - Ex: "17:00:00"
  */
 export default (from: string, to: string) => {
   /** Ex: 13 */
   const fromHour: string = from.slice(0, 2);
   /** Ex: 30 */
-  const fromMinute: string = from.slice(-2);
+  const fromMinute: string = from.slice(3, 5);
   /** Ex: 17 */
   const toHour: string = to.slice(0, 2);
   /** Ex: 00 */
-  const toMinute: string = to.slice(-2);
+  const toMinute: string = to.slice(3, 5);
   return {
     fromHour: Number(fromHour),
     fromMinute: Number(fromMinute),
