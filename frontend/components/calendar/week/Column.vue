@@ -1,5 +1,8 @@
 <template>
-  <v-sheet :width="width">
+  <v-sheet
+    :id="'column-' + (dayNumber || 'interval')"
+    :width="width"
+  >
     <template v-if="isShowKlass">
       <LazyCalendarWeekKlass
         v-for="klass in klasses.filter((k) => k.dayOfWeek === dayNumber)"
