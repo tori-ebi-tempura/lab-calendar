@@ -12,7 +12,7 @@
         >
           {{ bodyProps.time.str }}
         </span>
-        <v-divider />
+        <v-divider :id="`time-divider-${bodyProps.time.id}`" />
       </template>
     </CalendarWeekColumn>
     <CalendarWeekColumn
@@ -24,7 +24,16 @@
       class="border-s"
     >
       <template #header>
-        {{ getDayOfWeekJaString(dayNumber) }}
+        <v-btn
+          size="small"
+          rounded="0"
+          elevation="0"
+          width="100%"
+          height="100%"
+          :color="dayNumber === today.getDay() ? 'blue' : 'white'"
+        >
+          {{ getDayOfWeekJaString(dayNumber) }}
+        </v-btn>
       </template>
       <template #body>
         <v-divider />
@@ -34,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
-const startTime = 9;
+const today = new Date();
+const startTime = 8;
 const endTime = 21;
 </script>
