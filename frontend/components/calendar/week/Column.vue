@@ -2,7 +2,7 @@
   <v-sheet :width="width">
     <template v-if="isShowKlass">
       <LazyCalendarWeekKlass
-        v-for="klass in klasses"
+        v-for="klass in klasses.filter((k) => k.dayOfWeek === dayNumber)"
         :key="klass.klassId"
         :klass="klass"
       >
@@ -36,6 +36,7 @@ interface Props {
   width: string;
   startTime: number;
   endTime: number;
+  dayNumber?: number;
   customClass?: string;
 }
 const { startTime, endTime } = defineProps<Props>();
@@ -52,24 +53,9 @@ const times = ((from: number, to: number) => {
   return timeObjects;
 })(startTime, endTime);
 
-const klasses: Klass[] = [
-  {
-    klassId: 1,
-    klassName: "ソフトウェア工学演習",
-    dayOfWeek: 2,
-    from: "17:10",
-    to: "18:50",
-    roomNames: ["A307"],
-  },
-  {
-    klassId: 2,
-    klassName: "プログラム実習2",
-    dayOfWeek: 2,
-    from: "13:30",
-    to: "17:00",
-    roomNames: ["A307"],
-  },
-];
+const url = "http://localhost:4000/users/1/klasses";
+const { data } = await useFetch(url);
+const { klasses } = data.value as { klasses: Klass[] };
 
 const isShowKlass = ref<boolean>(false);
 onMounted(() => {

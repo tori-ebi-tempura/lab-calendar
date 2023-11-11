@@ -4,7 +4,7 @@
     style="position: absolute; z-index: 2"
     :style="styleObject"
   >
-    Foo
+    <h3>{{ klass.klassName }}</h3>
   </v-btn>
 </template>
 

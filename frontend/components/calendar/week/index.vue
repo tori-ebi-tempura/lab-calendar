@@ -21,6 +21,7 @@
       width="15%"
       :start-time="startTime"
       :end-time="endTime"
+      :day-number="dayNumber"
       class="border-s"
     >
       <template #header>
