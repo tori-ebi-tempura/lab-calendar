@@ -1,6 +1,19 @@
 version: '1.0'
 
 services:
+  frontend:
+    image: lab-calendar:frontend
+    container_name: lab_calendar_frontend
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 3000:3000
+    tty: true
+
   backend:
     image: lab-calendar:backend
     container_name: lab_calendar_backend
