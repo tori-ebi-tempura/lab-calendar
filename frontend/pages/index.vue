@@ -7,6 +7,11 @@
 
 <script setup lang="ts">
 useHead({
+  meta: [
+    {
+      charset: "utf-8",
+    },
+  ],
   title: "トップページ - Lab-Calendar",
 });
 </script>
