@@ -5,6 +5,7 @@ ENV LANG=ja_JP.UTF-8
 
 WORKDIR /backend
 
-USER node
+USER root
 
 COPY ./backend/package*.json /backend/
+COPY ./db /db/

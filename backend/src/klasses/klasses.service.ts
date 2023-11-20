@@ -140,8 +140,7 @@ export class KlassesService {
     }
   }
 
-  // toDo:addUserInKlassesが作成出来たら戻り値の実装
-  async findAllByUserId(id: number): Promise<UpdateKlassDto[] | any> {
+  async findAllByUserId(id: number): Promise<UpdateKlassDto[]> {
     const klasses: Klass[] = await this.klassesRepository
       .createQueryBuilder("klass")
       .innerJoinAndSelect("klass.rooms", "rooms")
@@ -158,7 +157,7 @@ export class KlassesService {
   async addUserInKlasses(
     userId: number,
     klassId: number,
-  ): Promise<UpdateKlassDto | any> {
+  ): Promise<UpdateKlassDto> {
     const klass: Klass = await this.klassesRepository.findOne({
       where: { klassId: klassId },
       relations: {
@@ -208,6 +207,7 @@ export class KlassesService {
       return this.KlassToUpdateKlassDto(klass);
     }
   }
+
   KlassToUpdateKlassDto(klass: Klass): UpdateKlassDto {
     const resData: UpdateKlassDto = new UpdateKlassDto();
     resData.klassId = klass.klassId;
@@ -225,19 +225,4 @@ export class KlassesService {
     }
     return resData;
   }
-  // checkTypeOfCreateKlassDto(obj: object): boolean {
-  //   const comparisonCreateKlassDto: CreateKlassDto = new CreateKlassDto();
-  //   comparisonCreateKlassDto.klassName = "klassName";
-  //   comparisonCreateKlassDto.dayOfWeek = "dayOfWeek";
-  //   comparisonCreateKlassDto.from = "from";
-  //   comparisonCreateKlassDto.to = "to";
-  //   comparisonCreateKlassDto.roomNames = ["roomName"]
-
-  //   for (const key in comparisonCreateKlassDto) {
-  //     if (obj[key] === undefined) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
 }

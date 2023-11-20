@@ -11,12 +11,8 @@ import { ConfigModule } from "@nestjs/config";
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "db",
-      port: 5432,
-      username: "user",
-      password: "password",
-      database: "labdatabase",
+      type: "sqlite",
+      database: "../db/labcalendar.db",
       autoLoadEntities: true,
       synchronize: true,
     }),
